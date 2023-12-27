@@ -3,6 +3,7 @@ FROM rust:1 as builder
 WORKDIR /src
 COPY . .
 
+RUN cargo fetch
 RUN cargo install --path .
 
 FROM debian:bookworm-slim

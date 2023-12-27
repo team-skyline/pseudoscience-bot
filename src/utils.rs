@@ -83,13 +83,13 @@ macro_rules! check_output {
                 };
 
                 if !output.status.success() {
-                    message.push_str(format!(
+                    message.push_str(&format!(
                         "\nFailed to {} - {} returned non-zero exit code",
                         $action, $program
                     ));
                 }
 
-                $crate::say!($ctx, message);
+                $crate::say!($ctx, "{}", message);
             }
             Err(_) => $crate::say!($ctx, "Failed to {} - command execution failed.", $action),
         };

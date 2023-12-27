@@ -19,7 +19,7 @@ use std::collections::HashSet;
 use std::env;
 use std::string::ToString;
 
-const PREFIX: &str = ".";
+const PREFIX: &str = "!";
 
 struct Data {
     tree: sled::Db,

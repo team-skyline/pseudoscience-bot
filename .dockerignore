@@ -1,0 +1,9 @@
+/target
+.idea
+.env*
+sled_db
+Dockerfile
+docker-compose.yml
+.gitignore
+.git
+LICENSE

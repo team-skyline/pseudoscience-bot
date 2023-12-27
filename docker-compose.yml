@@ -1,0 +1,21 @@
+version: '3.8'
+
+volumes:
+  # db:
+  home:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # args:
+      #   ARCH: arm64
+    container_name: pseudoscience-bot
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+    volumes:
+      - ./sled_db:/db″
+      # - db:/db
+      - home:/home/appuser
+      - /Users/oskar/Workspaces/Other/pseudoscience-modpack:/data

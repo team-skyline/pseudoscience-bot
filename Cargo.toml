@@ -1,0 +1,17 @@
+[package]
+name = "pseudoscience-bot"
+authors = ["Oskar Manhart <52569953+oskardotglobal@users.noreply.github.com>"]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
+dotenv = "0.15.0"
+pretty_env_logger = "0.5.0"
+log = "0.4.19"
+sled = "0.34.7"
+poise = "0.5.7"
+anyhow = "1.0.76"
+chrono = "0.4.31"
+serenity = "0.12.0"

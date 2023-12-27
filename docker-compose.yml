@@ -14,8 +14,8 @@ services:
     container_name: pseudoscience-bot
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
+      PACKWIZ_REPO_PATH: /home/appuser/pseudoscience-modpack
     volumes:
       - ./sled_db:/db″
       # - db:/db
       - home:/home/appuser
-      - /Users/oskar/Workspaces/Other/pseudoscience-modpack:/data

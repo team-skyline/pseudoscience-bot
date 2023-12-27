@@ -1,7 +1,6 @@
-version: '3.8'
+version: "3.8"
 
 volumes:
-  # db:
   home:
 
 services:
@@ -9,13 +8,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # args:
-      #   ARCH: arm64
     container_name: pseudoscience-bot
+    restart: unless-stopped
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       PACKWIZ_REPO_PATH: /home/appuser/pseudoscience-modpack
+      DB_PATH: /db
+      RUST_LOG: warn,pseudoscience_bot=debug
     volumes:
-      - ./sled_db:/db″
-      # - db:/db
+      - ./sled_db:/db
       - home:/home/appuser

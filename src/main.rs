@@ -14,6 +14,7 @@ use crate::packwiz::packwiz;
 use crate::utils::fatal;
 use anyhow::Error;
 use dotenv::dotenv;
+use log::debug;
 use poise::serenity_prelude::{GatewayIntents, UserId};
 use std::collections::HashSet;
 use std::env;
@@ -38,9 +39,13 @@ pub async fn register(ctx: Context<'_>) -> Result<(), Error> {
 async fn main() {
     pretty_env_logger::init();
 
-    dotenv()
-        .ok()
-        .unwrap_or_else(|| fatal("Couldn't load .env file", ""));
+    if cfg!(debug_assertions) {
+        debug!("Running in debug mode, loading .env file..");
+
+        dotenv()
+            .ok()
+            .unwrap_or_else(|| fatal("Couldn't load .env file", ""));
+    }
 
     let token =
         env::var("DISCORD_TOKEN").unwrap_or_else(|e| fatal("DISCORD_TOKEN not found in env!", e));

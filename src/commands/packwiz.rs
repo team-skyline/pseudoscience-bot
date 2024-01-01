@@ -103,6 +103,8 @@ pub async fn packwiz(
                             );
                         }
                     }
+
+                    return Ok(());
                 }
 
                 cmd.args(split);

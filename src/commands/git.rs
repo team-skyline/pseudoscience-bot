@@ -71,7 +71,8 @@ pub async fn pull_request(
         ],
         "push branch",
         format!("git push -u origin {}", branch),
-        ctx
+        ctx,
+        false
     );
 
     check_output!(

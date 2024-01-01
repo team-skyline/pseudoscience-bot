@@ -43,18 +43,25 @@ macro_rules! say {
 /// Utilizes `say!` and `send_output` internally.  
 /// Usage: `check_output!(<binary>, <arguments>, <short description of action>, <ctx>);`  
 /// Example usage: `check_output!("git", ["add", "-A"], "add changes to commit", ctx);`  
+/// Will automatically add the command and arguments to the output.
+/// If you don't want this, specify `true` as the 6th argument.
+/// Example usage: `check_output!("git", ["add", "-A"], "add changes to commit", ctx, true);`
 #[macro_export]
 macro_rules! check_output {
     ($program:expr, $args:expr, $action:expr, $ctx:expr) => {
+        $crate::check_output!($program, $args, $action, $ctx, false)
+    };
+    ($program:expr, $args:expr, $action:expr, $ctx:expr, $silent:expr) => {
         $crate::check_output!(
             $program,
             $args,
             $action,
             format!("{} {}", $program, $args.join(" ")),
-            $ctx
+            $ctx,
+            $silent
         )
     };
-    ($program:expr, $args:expr, $action:expr, $display_command:expr, $ctx:expr) => {{
+    ($program:expr, $args:expr, $action:expr, $display_command:expr, $ctx:expr, $silent:expr) => {{
         let cwd = std::env::var("PACKWIZ_REPO_PATH")
             .unwrap_or_else(|e| $crate::utils::fatal("PACKWIZ_REPO_PATH not found in env!", e));
 
@@ -64,23 +71,27 @@ macro_rules! check_output {
             .output()
         {
             Ok(output) => {
-                let stdout = String::from_utf8_lossy(&output.stdout);
-                let stderr = String::from_utf8_lossy(&output.stderr);
+                let mut message = String::new();
 
-                let mut message = match (!stdout.is_empty(), !stderr.is_empty()) {
-                    // stdout is not empty, stderr is empty
-                    (true, false) => format!("```\n> {}\n{}```", $display_command, stdout),
-                    // stdout is empty, stderr is not empty
-                    (false, true) => format!("```\n> {}\n{}```", $display_command, stderr),
-                    // both aren't empty
-                    (true, true) => {
-                        format!("```\n> {}\n{}\n{}```", $display_command, stdout, stderr)
-                    }
-                    // both are empty
-                    (false, false) => {
-                        format!("```\n> {}```\nCommand ran with no output", $display_command)
-                    }
-                };
+                if $silent == false {
+                    let stdout = String::from_utf8_lossy(&output.stdout);
+                    let stderr = String::from_utf8_lossy(&output.stderr);
+
+                    message = match (!stdout.is_empty(), !stderr.is_empty()) {
+                        // stdout is not empty, stderr is empty
+                        (true, false) => format!("```\n> {}\n{}```", $display_command, stdout),
+                        // stdout is empty, stderr is not empty
+                        (false, true) => format!("```\n> {}\n{}```", $display_command, stderr),
+                        // both aren't empty
+                        (true, true) => {
+                            format!("```\n> {}\n{}\n{}```", $display_command, stdout, stderr)
+                        }
+                        // both are empty
+                        (false, false) => {
+                            format!("```\n> {}```\nCommand ran with no output", $display_command)
+                        }
+                    };
+                }
 
                 if !output.status.success() {
                     message.push_str(&format!(

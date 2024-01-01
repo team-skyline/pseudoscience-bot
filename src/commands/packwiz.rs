@@ -1,5 +1,5 @@
 use crate::utils::fatal;
-use crate::{say, Context};
+use crate::{check_output, say, Context};
 use anyhow::Error;
 use std::env::var;
 use std::process::Command;
@@ -69,6 +69,43 @@ pub async fn packwiz(
             true => {
                 let split: Vec<&str> = args.split_whitespace().collect();
                 command = split[0].to_string();
+
+                if split[0] == "bulkinstall" {
+                    let args = args
+                        .strip_prefix("bulkinstall ")
+                        .unwrap_or_else(|| unreachable!());
+                    let lines: Vec<&str> = args.split('\n').collect();
+
+                    for line in lines {
+                        if line.starts_with('#') {
+                            continue;
+                        }
+
+                        if line.is_empty() {
+                            continue;
+                        }
+
+                        if line.contains("modrinth.com") {
+                            check_output!(
+                                "packwiz",
+                                ["mr", "install", line],
+                                "install mod",
+                                ctx,
+                                true
+                            );
+                        }
+
+                        if line.contains("curseforge.com") {
+                            check_output!(
+                                "packwiz",
+                                ["cf", "install", line],
+                                "install mod",
+                                ctx,
+                                true
+                            );
+                        }
+                    }
+                }
 
                 cmd.args(split);
             }

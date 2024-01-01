@@ -1,4 +1,4 @@
-FROM rust:1 as builder
+FROM rust:1 AS builder
 
 WORKDIR /src
 COPY . .
@@ -6,7 +6,11 @@ COPY . .
 RUN cargo fetch
 RUN cargo install --path .
 
-FROM debian:bookworm-slim
+FROM golang:1.19 AS packwiz 
+
+RUN go install github.com/packwiz/packwiz@latest
+
+FROM debian:bookworm-slim AS runner
 
 ARG GH_VERSION=2.40.1
 ARG ARCH=amd64
@@ -24,6 +28,7 @@ RUN useradd -m -u 1000 -s /bin/sh appuser \
     && chown -R appuser /data
 
 COPY --from=builder /usr/local/cargo/bin/pseudoscience-bot /usr/local/bin/pseudoscience-bot
+COPY --from=packwiz /go/bin/packwiz /usr/local/bin/packwiz
 
 USER appuser
 

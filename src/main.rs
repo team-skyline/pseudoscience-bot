@@ -1,16 +1,10 @@
-mod custom_commands;
+mod commands;
 mod event;
-mod fun_commands;
-mod git;
-mod packwiz;
 mod utils;
 
 extern crate log;
 
-use crate::custom_commands::{rmalias, rmcommand, setalias, setcommand};
 use crate::event::event_handler;
-use crate::fun_commands::{setyawn, yawn};
-use crate::packwiz::packwiz;
 use crate::utils::fatal;
 use anyhow::Error;
 use dotenv::dotenv;
@@ -27,13 +21,6 @@ struct Data {
 }
 
 type Context<'a> = poise::Context<'a, Data, Error>;
-
-/// Buttons to register slash commands
-#[poise::command(prefix_command)]
-pub async fn register(ctx: Context<'_>) -> Result<(), Error> {
-    poise::builtins::register_application_commands_buttons(ctx).await?;
-    Ok(())
-}
 
 #[tokio::main]
 async fn main() {
@@ -54,17 +41,17 @@ async fn main() {
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             commands: vec![
-                setcommand(),
-                rmalias(),
-                rmcommand(),
-                setalias(),
-                register(),
-                yawn(),
-                setyawn(),
-                packwiz(),
-                git::commit(),
-                git::pull_request(),
-                git::reset(),
+                commands::custom::setcommand(),
+                commands::custom::rmalias(),
+                commands::custom::rmcommand(),
+                commands::custom::setalias(),
+                commands::dev::register(),
+                commands::fun::yawn(),
+                commands::fun::setyawn(),
+                commands::packwiz::packwiz(),
+                commands::git::commit(),
+                commands::git::pull_request(),
+                commands::git::reset(),
             ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some(PREFIX.into()),

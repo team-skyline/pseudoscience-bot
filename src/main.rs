@@ -52,6 +52,8 @@ async fn main() {
                 commands::git::commit(),
                 commands::git::pull_request(),
                 commands::git::reset(),
+                commands::dev::register(),
+                commands::dev::bash(),
             ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some(PREFIX.into()),

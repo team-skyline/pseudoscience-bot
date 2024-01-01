@@ -12,7 +12,6 @@ use log::debug;
 use poise::serenity_prelude::{GatewayIntents, UserId};
 use std::collections::HashSet;
 use std::env;
-use std::string::ToString;
 
 const PREFIX: &str = "!";
 

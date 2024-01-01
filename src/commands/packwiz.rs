@@ -88,20 +88,18 @@ pub async fn packwiz(
                         if line.contains("modrinth.com") {
                             check_output!(
                                 "packwiz",
-                                ["mr", "install", line],
+                                ["mr", "install", "-y", line],
                                 "install mod",
-                                ctx,
-                                true
+                                ctx
                             );
                         }
 
                         if line.contains("curseforge.com") {
                             check_output!(
                                 "packwiz",
-                                ["cf", "install", line],
+                                ["cf", "install", "-y", line],
                                 "install mod",
-                                ctx,
-                                true
+                                ctx
                             );
                         }
                     }

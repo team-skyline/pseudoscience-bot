@@ -4,7 +4,7 @@ use chrono::Utc;
 
 // idk what clippy is smoking here, this isn't dead code
 #[allow(dead_code)]
-const CURRENT_ITERATION: &str = "v1.1";
+const CURRENT_ITERATION: &str = "v2";
 
 /// Commit all current changes.
 #[poise::command(slash_command, prefix_command, owners_only)]
